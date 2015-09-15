@@ -113,11 +113,12 @@ makeCacheMatrix <- function(matrix = matrix(), verbose = FALSE) {
     .setInverse <- function (newInverse) inverse <<- newInverse
     .getInverse <- function () inverse
     r <- list(
+        setVerbose = setVerbose,  ## sets verbose operation on or off
+        isVerbose = isVerbose,    ## predicate of verbose operation
         set = set,  ## setter to change the underlying matrix
         get = get,  ## getter for the underlying matrix
         .setInverse = .setInverse,  ## setter for the inverse matrix cache
-        .getInverse = .getInverse,  ## getter for the inverse matrix cache
-        isVerbose = isVerbose  ## predicate of verbose operation
+        .getInverse = .getInverse   ## getter for the inverse matrix cache
     )
     
     invisible(r)

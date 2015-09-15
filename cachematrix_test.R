@@ -35,6 +35,22 @@ source("cachematrix.R")
     print("Change to identical matrix (inverse shall not be discared:") 
     cached$set(matrix)
     cacheSolve(cached)
+
+    print("Turn verbose off. No message shall be printed till END.")
+    cached$setVerbose(FALSE)
+    cacheSolve(cached)
+    print("END.")    
+
+    print("New non verbose object. No message shall be printed till END.")
+    cached <- makeCacheMatrix(matrix)
+    cacheSolve(cached)
+    cacheSolve(cached)
+    print("END.")    
+    print("Restore verbosity on non verbose object.")
+    cached$setVerbose(TRUE)
+    cacheSolve(cached)
+
+    print("")
 }
 
 testCacheMatrix <- function () {
