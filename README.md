@@ -1,3 +1,71 @@
+*Note from student:*
+
+### Introduction
+
+The .R files in this directory contain the solution for Programming Assignment 2 of the rprog-032 Coursera course.
+
+Implementation adds some features to the original caché-capable requirement:
+
+* Verbose operation can be enabled (to log the caché internal operation)
+* Skip changes if new matrix is identical to original
+* An additional `cachematrix_test.R` unit testing module (with a `testCacheMatrix()` function) 
+
+Sample usage:
+
+    > original <- matrix(c(1, 0, 5, 2, 1, 6, 3, 4, 0), nrow = 3, ncol = 3)
+    > cached <- makeCacheMatrix(original)
+    > cached$setVerbose(TRUE)
+    ## Cache matrix is now in verbose mode. Will inform of inverse
+    ## calculation, cache hit or internal matrix modification.
+    > cacheSolve(cached)
+    Inverse computed.
+         [,1] [,2] [,3]
+    [1,]  -24   18    5
+    [2,]   20  -15   -4
+    [3,]   -5    4    1
+    > cacheSolve(cached)
+    Inverse retrieved from cache.
+         [,1] [,2] [,3]
+    [1,]  -24   18    5
+    [2,]   20  -15   -4
+    [3,]   -5    4    1
+    > cacheSolve(cached)
+    Inverse retrieved from cache.
+         [,1] [,2] [,3]
+    [1,]  -24   18    5
+    [2,]   20  -15   -4
+    [3,]   -5    4    1
+    ## Change internal matrix to
+    > alternate <- matrix(c(4, 3, 3, 2), nrow = 2, ncol = 2)
+    > cached$set(alternate)
+    Matrix changed. Discarding any previous cached inverse.
+    > cacheSolve(cached)
+    Inverse computed.
+         [,1] [,2]
+    [1,]   -2    3
+    [2,]    3   -4
+    > cacheSolve(cached)
+    Inverse retrieved from cache.
+         [,1] [,2]
+    [1,]   -2    3
+    [2,]    3   -4
+    > cached$set(alternate)
+    New matrix is identical. Nothing will be changed.
+    > cacheSolve(cached)
+    Inverse retrieved from cache.
+         [,1] [,2]
+    [1,]   -2    3
+    [2,]    3   -4
+    ## Disable verbose mode. No messages about operation will be printed.
+    > cached$setVerbose(FALSE)
+    > cacheSolve(cached)
+         [,1] [,2]
+    [1,]   -2    3
+    [2,]    3   -4
+    > 
+
+*Original README.md contents:*
+
 ### Introduction
 
 This second programming assignment will require you to write an R
