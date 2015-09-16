@@ -125,21 +125,21 @@
 ##     .getInverse()   Gets the cached inverse (see cacheSolve function)
 ##                     
 ##
-makeCacheMatrix <- function(matrix = matrix()) {
+makeCacheMatrix <- function(x = matrix()) {
     verbose <- FALSE
     isVerbose <- function () verbose
     setVerbose <- function (newVerbose) verbose <<- newVerbose
     inverse <- NULL
     set <- function (newMatrix) {
-        if (identical(matrix, newMatrix)) {
+        if (identical(x, newMatrix)) {
             .cacheMatrixMessage(isVerbose(), "New matrix is identical. Nothing will be changed.")
         } else {
             .cacheMatrixMessage(isVerbose(), "Matrix changed. Discarding any previous cached inverse.")
-            matrix <<- newMatrix
+            x <<- newMatrix
             inverse <<- NULL
         }
     }
-    get <- function () matrix
+    get <- function () x
     .setInverse <- function (newInverse) inverse <<- newInverse
     .getInverse <- function () inverse
     
