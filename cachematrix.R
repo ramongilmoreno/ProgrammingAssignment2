@@ -99,7 +99,11 @@
 ##     > 
 
 ## Internal function for verbose operation of the matrix
-.cacheMatrixMessage <- function (s) message(paste("*** [cachematrix]:", s))
+.cacheMatrixMessage <- function (verbose, m) {
+    if (verbose) {
+        message(paste("*** [cachematrix]:", m))
+    }
+}
 
 ##
 ## Creates a matrix object capable of caching its inverse. The returned object
@@ -128,13 +132,9 @@ makeCacheMatrix <- function(matrix = matrix()) {
     inverse <- NULL
     set <- function (newMatrix) {
         if (identical(matrix, newMatrix)) {
-            if (isVerbose()) {
-                .cacheMatrixMessage("New matrix is identical. Nothing will be changed.")
-            }
+            .cacheMatrixMessage(isVerbose(), "New matrix is identical. Nothing will be changed.")
         } else {
-            if (isVerbose()) {
-                .cacheMatrixMessage("Matrix changed. Discarding any previous cached inverse.")
-            }
+            .cacheMatrixMessage(isVerbose(), "Matrix changed. Discarding any previous cached inverse.")
             matrix <<- newMatrix
             inverse <<- NULL
         }
@@ -174,13 +174,9 @@ cacheSolve <- function(x, ...) {
     if (is.null(x$.getInverse())) {
         # Inverse not found. Compute and set to the cached matrix
         x$.setInverse(solve(x$get(), ...))
-        if (x$isVerbose()) {
-            .cacheMatrixMessage("Inverse computed.")
-        }
+        .cacheMatrixMessage(x$isVerbose(), "Inverse computed.")
     } else {
-        if (x$isVerbose()) {
-            .cacheMatrixMessage("Inverse retrieved from cache.")
-        }
+        .cacheMatrixMessage(x$isVerbose(), "Inverse retrieved from cache.")
     }
     
     # Inverse already computed here.
