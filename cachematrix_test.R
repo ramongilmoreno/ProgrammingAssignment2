@@ -10,57 +10,64 @@
 
 source("cachematrix.R")
 
+.myprint <- function (x) message(x)  ## Print plain text to console (e.g. no quotes)
+.mymatrixprint <- function (x) print(x)  ## Print matrix with indentation
+
 .testCacheMatrix <- function (cached) {
-    print("Matrix is:")
-    matrix <- cached$get()
-    print(matrix)
+    verboseOriginalValue <- cached$isVerbose()
+
+    ## Turn on verbose mode
+    cached$setVerbose(TRUE)
     
-    print("Request inverse multiple times:") 
+    .myprint("Matrix is:")
+    matrix <- cached$get()
+    .mymatrixprint(matrix)
+    
+    .myprint("Request inverse multiple times:") 
     cacheSolve(cached)
     cacheSolve(cached)
 
-    print("Computed (and cached) inverse:")
+    .myprint("Computed (and cached) inverse:")
     computed <- cacheSolve(cached)
-    print(computed)
+    .mymatrixprint(computed)
 
-    print("Expected inverse:")
+    .myprint("Expected inverse:")
     expected <- solve(cached$get())
-    print(expected)
+    .mymatrixprint(expected)
     i <- identical(computed, expected)
-    print(paste("Are computed and expected inverse identical?", i))
+    .myprint(paste("Are computed and expected inverse identical?", i))
     if (!i) {
-        stop("Not identical expected and obtained inverse matrices!")
+        stop("Expected and obtained inverse matrices are not identical!")
     }
 
-    print("Change to identical matrix (inverse shall not be discared:") 
+    .myprint("Change to identical matrix (inverse shall not be discared):") 
     cached$set(matrix)
     cacheSolve(cached)
 
-    print("Turn verbose off. No message shall be printed till END.")
+    .myprint("Turn verbose off. No message shall be printed till END.")
     cached$setVerbose(FALSE)
     cacheSolve(cached)
-    print("END.")    
+    .myprint("END.")    
 
-    print("New non verbose object. No message shall be printed till END.")
-    cached <- makeCacheMatrix(matrix)
-    cacheSolve(cached)
-    cacheSolve(cached)
-    print("END.")    
-    print("Restore verbosity on non verbose object.")
+    .myprint("Restore verbosity on non verbose object and check messages are back:")
     cached$setVerbose(TRUE)
     cacheSolve(cached)
 
-    print("")
+    .myprint("Tests finished")
+    
+    ## Restore original verbosity
+    cached$setVerbose(verboseOriginalValue)
 }
 
 testCacheMatrix <- function () {
     original <- matrix(c(1, 0, 5, 2, 1, 6, 3, 4, 0), nrow = 3, ncol = 3)
-    print("Creating cache-capable object for matrix:")
-    cached <- makeCacheMatrix(original, verbose = TRUE)
+    .myprint("Creating cache-capable object for matrix:")
+    cached <- makeCacheMatrix(original)
+    cached$setVerbose(TRUE)
     .testCacheMatrix(cached)
     
     alternate <- matrix(c(4, 3, 3, 2), nrow = 2, ncol = 2)
-    print("Switching to other matrix:")
+    .myprint("Switching to other matrix:")
     cached$set(alternate)
     .testCacheMatrix(cached)
 }
